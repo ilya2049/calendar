@@ -2,7 +2,6 @@ package note
 
 import (
 	"calendar/internal/app/calendar/domain/date"
-	"calendar/internal/pkg/errors"
 
 	stdErrors "errors"
 )
@@ -25,8 +24,7 @@ func NewService(noteDAO DAO, watch date.Watch) *Service {
 
 func (s *Service) WriteDownForFuture(n Note) error {
 	if !date.IsInFuture(s.watch, n.Date) {
-		return errors.New(errCantLeaveInPast).
-			SetCode(errors.CodeInvalidInput)
+		return errCantLeaveInPast
 	}
 
 	return s.noteDAO.Save(n)
