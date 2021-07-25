@@ -15,7 +15,7 @@ var (
 func BindJSON(c *fiber.Ctx, obj interface{}) error {
 	if err := c.BodyParser(obj); err != nil {
 		return errors.New(errInvalidJSON).
-			SetCode(errors.InvalidInputSchemaCode).
+			SetCode(errors.CodeInvalidInputSchema).
 			SetDetail(errors.KeyCause, err.Error())
 	}
 

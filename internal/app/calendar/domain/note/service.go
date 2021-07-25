@@ -26,7 +26,7 @@ func NewService(noteDAO DAO, watch date.Watch) *Service {
 func (s *Service) WriteDownForFuture(n Note) error {
 	if !date.IsInFuture(s.watch, n.Date) {
 		return errors.New(errCantLeaveInPast).
-			SetCode(errors.InvalidInputCode)
+			SetCode(errors.CodeInvalidInput)
 	}
 
 	return s.noteDAO.Save(n)

@@ -14,7 +14,7 @@ func New(err error) *genericError {
 		message:      err.Error(),
 		details:      make(map[string]string),
 		wrappedError: err,
-		code:         UnexpectedCode,
+		code:         CodeUnexpected,
 	}
 }
 

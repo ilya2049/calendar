@@ -3,21 +3,21 @@ package errors
 type Code int
 
 const (
-	UnexpectedCode         Code = 0
-	NotFoundCode           Code = 1
-	InvalidInputCode       Code = 2
-	InvalidInputSchemaCode Code = 3
+	CodeUnexpected         Code = 0
+	CodeNotFoundCode       Code = 1
+	CodeInvalidInput       Code = 2
+	CodeInvalidInputSchema Code = 3
 )
 
 func filterCode(code Code) Code {
 	switch code {
-	case UnexpectedCode,
-		NotFoundCode,
-		InvalidInputCode,
-		InvalidInputSchemaCode:
+	case CodeUnexpected,
+		CodeNotFoundCode,
+		CodeInvalidInput,
+		CodeInvalidInputSchema:
 		return code
 
 	default:
-		return UnexpectedCode
+		return CodeUnexpected
 	}
 }
