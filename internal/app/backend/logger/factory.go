@@ -1,4 +1,4 @@
-package zaplogger
+package logger
 
 import (
 	"calendar/internal/pkg/log"

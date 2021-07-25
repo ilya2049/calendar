@@ -2,6 +2,7 @@ package note
 
 import (
 	"calendar/internal/app/calendar/domain/date"
+	"calendar/internal/pkg/event"
 )
 
 const (
@@ -9,7 +10,8 @@ const (
 )
 
 type ErrCantLeaveInPast struct {
-	DateInPast string
+	DateInPast  string
+	CurrentDate string
 }
 
 func (e *ErrCantLeaveInPast) Error() string {
@@ -17,20 +19,27 @@ func (e *ErrCantLeaveInPast) Error() string {
 }
 
 type Service struct {
-	noteDAO DAO
-	watch   date.Watch
+	eventBus event.Bus
+	noteDAO  DAO
+	watch    date.Watch
 }
 
-func NewService(noteDAO DAO, watch date.Watch) *Service {
+func NewService(noteDAO DAO, watch date.Watch, eventBus event.Bus) *Service {
 	return &Service{
-		noteDAO: noteDAO,
-		watch:   watch,
+		noteDAO:  noteDAO,
+		watch:    watch,
+		eventBus: eventBus,
 	}
 }
 
 func (s *Service) WriteDownForFuture(n Note) error {
 	if !date.IsInFuture(s.watch, n.Date) {
-		return &ErrCantLeaveInPast{DateInPast: string(n.Date)}
+		eventError := &ErrCantLeaveInPast{
+			CurrentDate: s.watch.Now().Format(date.Layout),
+			DateInPast:  string(n.Date),
+		}
+		s.eventBus.Publish(eventError)
+		return eventError
 	}
 
 	return s.noteDAO.Save(n)

@@ -1,4 +1,4 @@
-package zaplogger
+package logger
 
 type LogLevel = int8
 
