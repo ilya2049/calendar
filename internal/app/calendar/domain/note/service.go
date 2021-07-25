@@ -2,13 +2,19 @@ package note
 
 import (
 	"calendar/internal/app/calendar/domain/date"
-
-	stdErrors "errors"
 )
 
-var (
-	errCantLeaveInPast = stdErrors.New("can't leave a note in the past")
+const (
+	msgCantLeaveInPast = "can't leave a note in the past"
 )
+
+type ErrCantLeaveInPast struct {
+	DateInPast string
+}
+
+func (e *ErrCantLeaveInPast) Error() string {
+	return msgCantLeaveInPast
+}
 
 type Service struct {
 	noteDAO DAO
@@ -24,7 +30,7 @@ func NewService(noteDAO DAO, watch date.Watch) *Service {
 
 func (s *Service) WriteDownForFuture(n Note) error {
 	if !date.IsInFuture(s.watch, n.Date) {
-		return errCantLeaveInPast
+		return &ErrCantLeaveInPast{DateInPast: string(n.Date)}
 	}
 
 	return s.noteDAO.Save(n)
